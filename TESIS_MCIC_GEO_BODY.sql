@@ -3,12 +3,19 @@
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package Body TESIS_MCIC_GEO
+--  Funciones del paquete de funciones TESIS_MCIC_GEO utilizadas en la tesis 
+--  "MODELO PARA LA DETECCIÓN DE ANOMALÍAS SOBRE OBJETOS EN MOVIMIENTO EN BASES DE DATOS ESPACIO-TEMPORALES"
+--  para optar al título de Magister en ciencias de la información y las comunicaciones
+--  Autor: Diego Fernando Rodriguez Lamus
+--  Año 2021
 --------------------------------------------------------
 
   CREATE OR REPLACE PACKAGE BODY "HERMES"."TESIS_MCIC_GEO" 
 AS
   -- -----------------------------------------------------
   -- Function Volume(MBB)
+  -- Cálculo del volumen de la minima caja envolvente de una subtrayectoria (MBB)
+  -- MBB: Minima caja envolvente
   -- -----------------------------------------------------
   FUNCTION volumeMBB(
       minim IN spt_pos,
@@ -26,6 +33,9 @@ AS
   END volumeMBB;
 -- -----------------------------------------------------
 -- Function OVolume(MBBi,MBBj)
+-- Cálculo del volumen de traslape de la minima caja envolvente de una subtrayectoria (MBB)
+-- MBBi: Caja envolvente i
+-- MBBj: Caja envolvente j
 -- -----------------------------------------------------
   FUNCTION OVvolumeMBB(
       minim1 IN spt_pos,
@@ -45,6 +55,9 @@ AS
   END OVvolumeMBB;
 -- -----------------------------------------------------
 -- Function SIM(MBBi,MBBj)
+-- Cálculo de la similitud entre dos cajas envolventes
+-- MBBi: Caja envolvente i
+-- MBBj: Caja envolvente j
 -- -----------------------------------------------------
   FUNCTION SIM(
       OV NUMBER,
@@ -62,6 +75,10 @@ AS
   END SIM;
 -- -----------------------------------------------------
 -- Function SDIST(sim,trj,tri)
+-- Cálculo de distancia de simmilitud entre dos subtrayectorias a partir de su similitud de atributs
+-- sim: similitud de atributos
+-- trj: Subtrayectoria j
+-- tri: Subtrayectoria i
 -- -----------------------------------------------------
   FUNCTION SDIST(
       SIML NUMBER,
@@ -84,6 +101,8 @@ AS
   END SDIST;
 -- -----------------------------------------------------
 -- Function Construct_Segments (spt_pos_nt)
+-- Construir segmentos  a partir de un arreglo de puntos 
+-- spt_pos_nt: Arreglo de puntos
 -- -----------------------------------------------------
   FUNCTION Construct_Segments(
       CP spt_pos_nt )
@@ -112,6 +131,8 @@ AS
   END Construct_Segments;
 -- -----------------------------------------------------
 -- Function Segments2spt_pos (line_segment_nt)
+-- Extraer los puntos que componen un arreglo de segmentos
+-- line_segment_nt: Arreglo de segmentos
 -- -----------------------------------------------------
   FUNCTION Segments2spt_pos(
       lines line_segment_nt )
@@ -154,6 +175,10 @@ AS
   END Segments2spt_pos;
 -- -----------------------------------------------------
 -- Function Calculate_Neps (D line_segment_nt,pos number, eps number)
+-- Calcular el vecindario de una subtrayectoria a partir de radio dado
+-- D: Segmento (subtrayectoria)
+-- pos: Posición
+-- eps: Radio del vecindario
 -- -----------------------------------------------------
   FUNCTION Calculate_Neps(
       D IN OUT NOCOPY line_segment_nt,
@@ -201,6 +226,9 @@ AS
   END Calculate_Neps;
 -- -----------------------------------------------------
 -- Function IsCore (Neps INTEGER_NT, MinTrs NUMBER)
+-- Decide si una subtrayectoria es núcleo
+-- Neps: Vecindario (Cuantas subtrayectorias)
+-- MinTrs: Mínimo número de trayectorias
 -- -----------------------------------------------------
   FUNCTION IsCore(
       Neps INTEGER_NT,
@@ -218,6 +246,10 @@ AS
   END IsCore;
 -- -----------------------------------------------------
 -- Function AssignCluster (Neps INTEGER_NT, D line_segment_nt, cluster_id INTEGER)
+-- Asignar cluster a subtrayectoria
+-- Neps: Vecindario (Cuantas subtrayectorias)
+-- D: Arreglo de subtrayectorias
+-- cluster_id: Identificador del cluster
 -- -----------------------------------------------------
   FUNCTION AssignCluster(
       Neps INTEGER_NT,
@@ -246,6 +278,8 @@ AS
   END AssignCluster;
 -- -----------------------------------------------------
 -- Function lines_cp(D line_segment_nt)
+-- Compone una linea desde segmentos (subtrayectorias)
+-- D: Arreglo de subtrayectorias
 -- -----------------------------------------------------
   FUNCTION lines_cp(
       D line_segment_nt )
@@ -266,6 +300,8 @@ AS
   END lines_cp;
 -- -----------------------------------------------------
 -- Function extract_points_clusters(O internal_cluster_nt)
+-- Extraer los puntos que hacen parte de un cluster
+-- O: Cluster
 -- -----------------------------------------------------
   FUNCTION extract_points_clusters(
       O internal_cluster_nt )
@@ -301,6 +337,8 @@ AS
   END extract_points_clusters;
 -- -----------------------------------------------------
 -- Function join_segments(table_name varchar)
+-- Unir segmentos
+-- table_name: Nombre de la tabla donde se almacenan los resultados
 -- -----------------------------------------------------
   FUNCTION join_segments
     (
@@ -361,6 +399,8 @@ AS
    
   -- -----------------------------------------------------
 -- Function sort_collection(table_name varchar)
+-- Organizar colección
+-- table_name: Nombre de la tabla donde se encuentra la colección
 -- ----------------------------------------------------- 
   FUNCTION sort_collection (
                    input_collection IN spt_pos_nt
@@ -401,6 +441,9 @@ AS
     
     -- -----------------------------------------------------
 -- Function EXTRACT_RTR(CLUSTER INTERNAL_CLUSTER_NT, MinTrs NUMBER)
+-- Extraer trayectoria representativa desde un cluster
+-- CLUSTER: Cluster al que se genera trayectoria representativa
+-- MinTrs: Mínimo número de subtrayectorias
 -- -----------------------------------------------------
   FUNCTION EXTRACT_RTR
     (
@@ -571,7 +614,10 @@ AS
     END EXTRACT_RTR;
     
     -- -----------------------------------------------------
--- Function segments_containing_x
+-- Function segments_containing_x (x NUMBER, segments line_segment_nt)
+-- Obtener los segmentos (subtrayectorias) que se cruzan en una determinada coordenada x
+-- x: Coordenada x
+-- segments: Conjunto de segmentos a evaluar
 -- -----------------------------------------------------
   FUNCTION segments_containing_x
   (
@@ -607,7 +653,9 @@ AS
   END segments_containing_x;
   
       -- -----------------------------------------------------
--- Function create_direction_vector
+-- Function create_direction_vector (O INTERNAL_CLUSTER)
+-- Crear vector de dirección media de un cluster
+-- O: Cluster
 -- -----------------------------------------------------
   FUNCTION create_direction_vector
   (
@@ -656,7 +704,10 @@ AS
   END create_direction_vector;
   
     -- -----------------------------------------------------
--- Function angle_xx
+-- Function angle_xx (s sp_pos, e sp_pos)
+-- Obtener angulo a partir de coordenadas
+-- s: Punto de inicio
+-- e: Punto de finalización
 -- -----------------------------------------------------
   FUNCTION angle_xx
     (
@@ -670,7 +721,12 @@ AS
   END angle_xx;
   
   -- -----------------------------------------------------
--- Function angle
+-- Function angle(s1 IN sp_pos,e1 IN sp_pos,s2 IN sp_pos,e2 IN sp_pos)
+-- Resta de angulos
+-- s1: Punto de inicio 1
+-- e1: Punto de finalización 1
+-- s2: Punto de inicio 2
+-- e2: Punto de finalización 2
 -- -----------------------------------------------------
   FUNCTION angle
     (
@@ -689,6 +745,11 @@ AS
 
     -- -----------------------------------------------------
     -- Function Main_ (D line_segment_nt, Eps NUMBER, MinTrs INTEGER)
+	-- Función principal encargada de integrar todas las funciones que hacen parte de este paquete para obtener las trayectorias 
+	-- representativas de los cluster generados apartir de los datos crudos
+	-- D: Arreglo de subtrayectorias
+	-- Eps: Radio de vecindario (DB-SCAN)
+	-- MinTrs: Mínimo número de subtrayectorias (DB-SCAN)
     -- -----------------------------------------------------
     FUNCTION Main_(
         D IN OUT NOCOPY line_segment_nt,
@@ -778,7 +839,14 @@ AS
       RETURN O;
     END Main_;
 
--- FUNCIÓN PARA COMPARAR PATRÓN IDEAL Y REAL
+-- -----------------------------------------------------
+-- Function compare_trajectories (a NUMBER)
+-- FUNCIÓN PARA COMPARAR PATRÓN IDEAL Y REAL, genera tabla con comparaciones entre las trayectorias de el patron ideal y el real,
+-- genera los porcentajes de similitud que indican el grado en el que se puede considerar anomalia
+-- a: Arreglo de subtrayectorias
+-- Eps: Radio de vecindario (DB-SCAN)
+-- MinTrs: Mínimo número de subtrayectorias (DB-SCAN)
+-- -----------------------------------------------------
   FUNCTION compare_trajectories (a NUMBER) RETURN moving_point AS
   velocidad_pattern NUMBER;
   velocidad_real NUMBER;

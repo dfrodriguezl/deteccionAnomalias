@@ -3,6 +3,11 @@
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package TESIS_MCIC_GEO
+--  Declaraciones del paquete de funciones TESIS_MCIC_GEO utilizadas en la tesis 
+--  "MODELO PARA LA DETECCIÓN DE ANOMALÍAS SOBRE OBJETOS EN MOVIMIENTO EN BASES DE DATOS ESPACIO-TEMPORALES"
+--  para optar al título de Magister en ciencias de la información y las comunicaciones
+--  Autor: Diego Fernando Rodriguez Lamus
+--  Año 2021
 --------------------------------------------------------
 
   CREATE OR REPLACE PACKAGE "HERMES"."TESIS_MCIC_GEO" AS 
